@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MusicAPP</title>
+</head>
+<body>
+    <h1>Mis instrumentos</h1>
+
+    <ul>
+        {% for instrumento in instrumentos %}
+        <li> 
+            {{instrumento.nombre}} - {{instrumento.tipo}} - 
+            {{instrumento.cantidad}} - 
+            {{instrumento.precio}} - {{instrumento.marca}}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
