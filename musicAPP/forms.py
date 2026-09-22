@@ -6,7 +6,7 @@ from .models import Instrumentos
 class InstrumentoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Reemplaza la opción vacía automática por un mensaje claro para el usuario.
+        # Reemplaza la opcion vacia automatica por un mensaje claro para el usuario.
         tipo_choices = [choice for choice in self.fields['tipo'].choices if choice[0] != '']
         marca_choices = [choice for choice in self.fields['marca'].choices if choice[0] != '']
         self.fields['tipo'].choices = [('', 'Seleccione')] + tipo_choices
@@ -17,7 +17,7 @@ class InstrumentoForm(forms.ModelForm):
     class Meta:
         model = Instrumentos
         fields = ['nombre', 'tipo', 'marca', 'cantidad', 'precio']
-        # Estos atributos también bloquean valores inválidos desde el navegador.
+        # Estos atributos tambien bloquean valores invalidos desde el navegador.
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
