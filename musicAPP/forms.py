@@ -20,7 +20,7 @@ class InstrumentoForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '1000'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '2000'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000'}),
         }
 
@@ -36,6 +36,6 @@ class InstrumentoForm(forms.ModelForm):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad is not None and cantidad < 0:
             raise forms.ValidationError("La cantidad en stock no puede ser negativa.")
-        if cantidad is not None and cantidad > 1000:
-            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 1000.")
+        if cantidad is not None and cantidad > 2000:
+            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 2000.")
         return cantidad
