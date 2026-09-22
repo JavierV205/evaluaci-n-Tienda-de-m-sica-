@@ -5,6 +5,7 @@ from .forms import InstrumentoForm
 
 # 1. LISTAR / INICIO
 def inicio(request):
+    # Filtra el catálogo cuando el usuario envía un término de búsqueda.
     busqueda = request.GET.get('q', '').strip()
     instrumentos = Instrumentos.objects.all()
 

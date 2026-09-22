@@ -6,6 +6,7 @@ from .models import Instrumentos
 class InstrumentoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Reemplaza la opción vacía automática por un mensaje claro para el usuario.
         tipo_choices = [choice for choice in self.fields['tipo'].choices if choice[0] != '']
         marca_choices = [choice for choice in self.fields['marca'].choices if choice[0] != '']
         self.fields['tipo'].choices = [('', 'Seleccione')] + tipo_choices
@@ -16,11 +17,12 @@ class InstrumentoForm(forms.ModelForm):
     class Meta:
         model = Instrumentos
         fields = ['nombre', 'tipo', 'marca', 'cantidad', 'precio']
+        # Estos atributos también bloquean valores inválidos desde el navegador.
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '2000'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '2000'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000'}),
         }
 
@@ -31,11 +33,11 @@ class InstrumentoForm(forms.ModelForm):
             raise forms.ValidationError("El precio debe ser un numero mayor a cero.")
         return precio
 
-    # Validacion personalizada: Cantidad no negativa
+    # Validacion personalizada: Cantidad positiva y no mayor que 2000
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
-        if cantidad is not None and cantidad < 0:
-            raise forms.ValidationError("La cantidad en stock no puede ser negativa.")
+        if cantidad is not None and cantidad <= 0:
+            raise forms.ValidationError("La cantidad en stock debe ser mayor que cero.")
         if cantidad is not None and cantidad > 2000:
             raise forms.ValidationError("La cantidad en stock no puede ser mayor que 2000.")
         return cantidad

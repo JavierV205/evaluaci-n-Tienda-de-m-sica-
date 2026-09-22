@@ -20,10 +20,11 @@ MARCA_CHOICES = [
     ]
 
 class Instrumentos(models.Model):
+    # El modelo representa los instrumentos disponibles en el inventario.
     nombre=models.CharField(max_length=50)
     tipo=models.CharField(max_length=50, 
                           choices=TIPO_CHOICES)
-    cantidad=models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2000)])
+    cantidad=models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(2000)])
     precio=models.PositiveIntegerField(validators=[MaxValueValidator(1000000)])
     marca=models.CharField( max_length=50, 
                            choices=MARCA_CHOICES)
