@@ -1,11 +1,24 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Instrumentos
 from .forms import InstrumentoForm
 
 # 1. LISTAR / INICIO
 def inicio(request):
+    busqueda = request.GET.get('q', '').strip()
     instrumentos = Instrumentos.objects.all()
-    return render(request, 'musicAPP/inicio.html', {'instrumentos': instrumentos})
+
+    if busqueda:
+        instrumentos = instrumentos.filter(
+            Q(nombre__icontains=busqueda)
+            | Q(tipo__icontains=busqueda)
+            | Q(marca__icontains=busqueda)
+        )
+
+    return render(request, 'musicAPP/inicio.html', {
+        'instrumentos': instrumentos,
+        'busqueda': busqueda,
+    })
 
 # 2. CREAR
 def agregar_instrumento(request):

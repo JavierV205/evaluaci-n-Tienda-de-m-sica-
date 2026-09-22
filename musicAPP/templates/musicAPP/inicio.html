@@ -23,6 +23,24 @@
             <h2 class="fw-bold text-secondary">Catalogo de Instrumentos</h2>
         </div>
 
+        <form method="get" class="row g-2 mb-4">
+            <div class="col-md-10">
+                <label for="busqueda" class="visually-hidden">Buscar instrumento</label>
+                <input type="search" name="q" id="busqueda" class="form-control"
+                       placeholder="Buscar por nombre, tipo o marca" value="{{ busqueda }}">
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-success flex-grow-1">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar
+                </button>
+                {% if busqueda %}
+                    <a href="{% url 'inicio' %}" class="btn btn-outline-secondary" title="Limpiar búsqueda">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <table class="table table-hover table-striped align-middle mb-0">
