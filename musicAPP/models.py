@@ -27,7 +27,7 @@ class Instrumentos(models.Model):
                           choices=TIPO_CHOICES, 
                           default='selecione')
     cantidad=models.IntegerField(validators=[MinValueValidator(0)])
-    precio=models.DecimalField( max_digits=10)
+    precio=models.PositiveIntegerField()
     marca=models.CharField( max_length=50, 
                            choices=MARCA_CHOICES, 
                            default='selecione')
