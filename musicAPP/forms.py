@@ -4,15 +4,24 @@ from .models import Instrumentos
 # validacion de formuulario
 
 class InstrumentoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        tipo_choices = [choice for choice in self.fields['tipo'].choices if choice[0] != '']
+        marca_choices = [choice for choice in self.fields['marca'].choices if choice[0] != '']
+        self.fields['tipo'].choices = [('', 'Seleccione')] + tipo_choices
+        self.fields['marca'].choices = [('', 'Seleccione')] + marca_choices
+        self.fields['tipo'].error_messages['required'] = 'Debes seleccionar un tipo de instrumento.'
+        self.fields['marca'].error_messages['required'] = 'Debes seleccionar una marca.'
+
     class Meta:
         model = Instrumentos
         fields = ['nombre', 'tipo', 'marca', 'cantidad', 'precio']
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '1000'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000'}),
         }
 
     # Validacion personalizada: Precio mayor a 0
@@ -27,4 +36,6 @@ class InstrumentoForm(forms.ModelForm):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad is not None and cantidad < 0:
             raise forms.ValidationError("La cantidad en stock no puede ser negativa.")
+        if cantidad is not None and cantidad > 1000:
+            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 1000.")
         return cantidad
