@@ -2,6 +2,12 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Instrumentos
 from .forms import InstrumentoForm
+from django.contrib.auth import authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
 
 # 1. LISTAR / INICIO
 def inicio(request):
@@ -51,3 +57,29 @@ def eliminar_instrumento(request, id):
         instrumento.delete()
         return redirect('inicio')
     return render(request, 'musicAPP/eliminar.html', {'instrumento': instrumento})
+
+# 5. LOGIN
+def login_pagina(request):
+    return render(request, 'musicAPP/login.html')
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        usuario = authenticate(request, username=username, password=password)
+
+        if usuario is not None:
+            token, created = Token.objects.get_or_create(user=usuario)
+            return Response({
+                'mensaje': 'Inicio de sesión exitoso',
+                'usuario': usuario.username,
+                'token': token.key
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'mensaje': 'Credenciales inválidas'
+            }, status=status.HTTP_401_UNAUTHORIZED)

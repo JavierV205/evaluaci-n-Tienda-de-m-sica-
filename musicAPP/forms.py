@@ -22,8 +22,8 @@ class InstrumentoForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '2000'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '2000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
         }
 
     # Validacion personalizada: Precio mayor a 0
