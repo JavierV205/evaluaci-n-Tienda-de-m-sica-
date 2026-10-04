@@ -105,7 +105,15 @@
             min-height: 3.1rem;
             background-color: var(--accent);
         }
+        .text-bg-success {
+            color: #fff !important;
+            background-color: rgb(13 255 0 / 31%) !important;
+        }
 
+        .text-success-emphasis {
+            color: #01ff8c !important;
+        }
+        
         .password-toggle {
             border-color: #454b54;
             color: var(--muted);
@@ -144,6 +152,7 @@
                     <i class="fa-solid fa-guitar me-2" aria-hidden="true"></i>
                     Instrumentos para cada ritmo.
                 </p>
+                
             </section>
 
             <section class="form-panel col-md-7">
@@ -161,13 +170,13 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="username" class="form-label">Nombre de usuario</label>
-                            <input class="form-control" id="username" name="username" type="text"
+                            <input maxlength="30" class="form-control" id="username" name="username" type="text"
                                    placeholder="Tu usuario" autocomplete="username" required autofocus>
                         </div>
                         <div class="mb-4">
                             <label for="password" class="form-label">Contraseña</label>
                             <div class="input-group">
-                                <input class="form-control" id="password" name="password" type="password"
+                                <input maxlength="20" class="form-control" id="password" name="password" type="password"
                                        placeholder="Tu contraseña" autocomplete="current-password" required>
                                 <button class="btn password-toggle" id="toggle-password" type="button"
                                         aria-label="Mostrar contraseña" aria-pressed="false">

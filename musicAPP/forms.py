@@ -22,8 +22,8 @@ class InstrumentoForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '2000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '100', 'maxlength': '3', 'oninput': 'this.value = this.value.slice(0, 3)'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '60000', 'maxlength': '5', 'oninput': 'this.value = this.value.slice(0, 5)'}),
         }
 
     # Validacion personalizada: Precio mayor a 0
@@ -31,6 +31,8 @@ class InstrumentoForm(forms.ModelForm):
         precio = self.cleaned_data.get('precio')
         if precio is not None and precio <= 0:
             raise forms.ValidationError("El precio debe ser un numero mayor a cero.")
+        if precio is not None and precio > 60000:
+            raise forms.ValidationError("El precio no puede superar los 60000")
         return precio
 
     # Validacion personalizada: Cantidad positiva y no mayor que 2000
@@ -38,6 +40,6 @@ class InstrumentoForm(forms.ModelForm):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad is not None and cantidad <= 0:
             raise forms.ValidationError("La cantidad en stock debe ser mayor que cero.")
-        if cantidad is not None and cantidad > 2000:
-            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 2000.")
+        if cantidad is not None and cantidad > 100:
+            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 100.")
         return cantidad

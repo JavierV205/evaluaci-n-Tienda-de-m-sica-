@@ -70,6 +70,19 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
+        # validacion de caracteres
+        if len(username) > 30:
+            return Response(
+                {'mensaje': 'El nombre de usuario no debe excederce de los 30 caracteres.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if len(password) > 20:
+            return Response(
+                {'mensaje': 'La Contraseña no puede exceder los 20 caracteres.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         usuario = authenticate(request, username=username, password=password)
 
         if usuario is not None:
