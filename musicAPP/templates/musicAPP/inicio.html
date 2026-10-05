@@ -42,6 +42,13 @@
     background-color: rgb(13 240 74) !important;
     }
 
+    .navbar-action {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        justify-content: center;
+    }
+
 </style>
 
 <body class="bg-light">
@@ -49,8 +56,15 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'inicio' %}"><i class="fa-solid fa-music me-2"></i>Tienda de Musica</a>
-            <div class="navbar-nav ms-auto">
-                <a class="btn btn-success me-2" href="{% url 'agregar_instrumento' %}"><i class="fa-solid fa-plus me-1"></i> Agregar Instrumento</a>
+            <div class="d-flex align-items-center ms-auto gap-2">
+                <a class="btn btn-success navbar-action" href="{% url 'agregar_instrumento' %}"><i class="fa-solid fa-plus me-1"></i> Agregar Instrumento</a>
+                <form method="post" action="{% url 'logout' %}" class="d-inline m-0">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light navbar-action" type="submit">
+                        <i class="fa-solid fa-right-from-bracket me-1" aria-hidden="true"></i>
+                        Cerrar sesión
+                    </button>
+                </form>
             </div>
         </div>
     </nav>

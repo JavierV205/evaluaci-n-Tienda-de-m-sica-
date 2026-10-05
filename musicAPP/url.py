@@ -1,5 +1,4 @@
 from django.urls import path
-from django.contrib.auth.views import LogoutView
 from . import views
 
 
@@ -10,4 +9,5 @@ urlpatterns = [
     path('editar/<int:id>/', views.editar_instrumento, name='editar_instrumento'),
     path('eliminar/<int:id>/', views.eliminar_instrumento, name='eliminar_instrumento'),
     path('api/login/', views.LoginView.as_view(), name='api_login'),
+    path('cerrar-sesion/', views.cerrar_sesion, name='logout'),
 ]

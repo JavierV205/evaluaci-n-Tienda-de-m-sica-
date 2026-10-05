@@ -1,5 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from .models import Instrumentos
 from .forms import InstrumentoForm
 from django.contrib.auth import authenticate
@@ -10,6 +13,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 
 # 1. LISTAR / INICIO
+@login_required
 def inicio(request):
     # Filtra el catalogo cuando el usuario envia un termino de busqueda.
     busqueda = request.GET.get('q', '').strip()
@@ -28,6 +32,7 @@ def inicio(request):
     })
 
 # 2. CREAR
+@login_required
 def agregar_instrumento(request):
     if request.method == 'POST':
         form = InstrumentoForm(request.POST)
@@ -39,6 +44,7 @@ def agregar_instrumento(request):
     return render(request, 'musicAPP/agregar.html', {'form': form})
 
 # 3. EDITAR
+@login_required
 def editar_instrumento(request, id):
     instrumento = get_object_or_404(Instrumentos, id=id)
     if request.method == 'POST':
@@ -51,6 +57,7 @@ def editar_instrumento(request, id):
     return render(request, 'musicAPP/editar.html', {'form': form, 'instrumento': instrumento})
 
 # 4. ELIMINAR
+@login_required
 def eliminar_instrumento(request, id):
     instrumento = get_object_or_404(Instrumentos, id=id)
     if request.method == 'POST':
@@ -60,7 +67,17 @@ def eliminar_instrumento(request, id):
 
 # 5. LOGIN
 def login_pagina(request):
+    if request.user.is_authenticated:
+        return redirect('inicio')
     return render(request, 'musicAPP/login.html')
+
+
+@login_required
+@require_POST
+def cerrar_sesion(request):
+    Token.objects.filter(user=request.user).delete()
+    logout(request)
+    return redirect('login_pagina')
 
 
 class LoginView(APIView):
@@ -70,22 +87,35 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
+        if not isinstance(username, str) or not username.strip():
+            return Response(
+                {'mensaje': 'Debes ingresar un nombre de usuario.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not isinstance(password, str) or not password:
+            return Response(
+                {'mensaje': 'Debes ingresar una contraseña.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         # validacion de caracteres
         if len(username) > 30:
             return Response(
-                {'mensaje': 'El nombre de usuario no debe excederce de los 30 caracteres.'},
+                {'mensaje': 'El nombre de usuario no debe exceder los 30 caracteres.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         if len(password) > 20:
             return Response(
-                {'mensaje': 'La Contraseña no puede exceder los 20 caracteres.'},
+                {'mensaje': 'La contraseña no puede exceder los 20 caracteres.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
         usuario = authenticate(request, username=username, password=password)
 
         if usuario is not None:
+            login(request._request, usuario)
             token, created = Token.objects.get_or_create(user=usuario)
             return Response({
                 'mensaje': 'Inicio de sesión exitoso',

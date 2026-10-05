@@ -54,6 +54,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tienda_musica.urls'
+LOGIN_URL = 'login_pagina'
 
 TEMPLATES = [
     {
@@ -142,4 +143,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-

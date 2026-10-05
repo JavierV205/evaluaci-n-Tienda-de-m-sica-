@@ -25,7 +25,7 @@ class Instrumentos(models.Model):
     tipo=models.CharField(max_length=20, 
                           choices=TIPO_CHOICES)
     cantidad=models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
-    precio=models.PositiveIntegerField(validators=[MaxValueValidator(60000)])
+    precio=models.PositiveIntegerField(validators=[MaxValueValidator(999999)])
     marca=models.CharField( max_length=20, 
                            choices=MARCA_CHOICES)
 

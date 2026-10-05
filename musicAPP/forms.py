@@ -19,11 +19,11 @@ class InstrumentoForm(forms.ModelForm):
         fields = ['nombre', 'tipo', 'marca', 'cantidad', 'precio']
         # Estos atributos tambien bloquean valores invalidos desde el navegador.
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '25'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '100', 'maxlength': '3', 'oninput': 'this.value = this.value.slice(0, 3)'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '60000', 'maxlength': '5', 'oninput': 'this.value = this.value.slice(0, 5)'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '999999', 'maxlength': '6', 'oninput': 'this.value = this.value.slice(0, 6)'}),
         }
 
     # Validacion personalizada: Precio mayor a 0
@@ -31,11 +31,11 @@ class InstrumentoForm(forms.ModelForm):
         precio = self.cleaned_data.get('precio')
         if precio is not None and precio <= 0:
             raise forms.ValidationError("El precio debe ser un numero mayor a cero.")
-        if precio is not None and precio > 60000:
-            raise forms.ValidationError("El precio no puede superar los 60000")
+        if precio is not None and precio > 999999:
+            raise forms.ValidationError("El precio no puede superar los 999999")
         return precio
 
-    # Validacion personalizada: Cantidad positiva y no mayor que 2000
+    # Validacion personalizada: Cantidad positiva y no mayor que 100
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad is not None and cantidad <= 0:
