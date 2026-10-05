@@ -7,13 +7,64 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
+<style>
+
+    body {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 15% 15%, rgba(2, 252, 60, 0.18), transparent 35%),
+                linear-gradient(135deg, #000301, #01531d);
+            color: #04ff2e;
+        }
+    
+    .text-secondary {
+        --bs-text-opacity: 1;
+        color: rgb(255, 255, 255) !important;
+        }
+
+    .bg-dark {
+        --bs-bg-opacity: 1;
+        background-color: rgb(1 89 41 / 75%) !important;
+        }
+
+    .table>:not(caption)>*>* {
+    padding: .5rem .5rem;
+    color: var(--bs-table-color-state, var(--bs-table-color-type, #000000));
+    background-color: #00ff391f;
+    border-bottom-width: var(--bs-border-width);
+    box-shadow
+    : inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, #1c7b3147));
+        }
+
+    .bg-info {
+    --bs-bg-opacity: 1;
+    background-color: rgb(13 240 74) !important;
+    }
+
+    .navbar-action {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>
+
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'inicio' %}"><i class="fa-solid fa-music me-2"></i>Tienda de Musica</a>
-            <div class="navbar-nav ms-auto">
-                <a class="btn btn-success me-2" href="{% url 'agregar_instrumento' %}"><i class="fa-solid fa-plus me-1"></i> Agregar Instrumento</a>
+            <div class="d-flex align-items-center ms-auto gap-2">
+                <a class="btn btn-success navbar-action" href="{% url 'agregar_instrumento' %}"><i class="fa-solid fa-plus me-1"></i> Agregar Instrumento</a>
+                <form method="post" action="{% url 'logout' %}" class="d-inline m-0">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light navbar-action" type="submit">
+                        <i class="fa-solid fa-right-from-bracket me-1" aria-hidden="true"></i>
+                        Cerrar sesión
+                    </button>
+                </form>
             </div>
         </div>
     </nav>

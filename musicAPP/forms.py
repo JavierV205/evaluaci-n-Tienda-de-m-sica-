@@ -6,7 +6,7 @@ from .models import Instrumentos
 class InstrumentoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Reemplaza la opción vacía automática por un mensaje claro para el usuario.
+        # Reemplaza la opcion vacia automatica por un mensaje claro para el usuario.
         tipo_choices = [choice for choice in self.fields['tipo'].choices if choice[0] != '']
         marca_choices = [choice for choice in self.fields['marca'].choices if choice[0] != '']
         self.fields['tipo'].choices = [('', 'Seleccione')] + tipo_choices
@@ -17,13 +17,13 @@ class InstrumentoForm(forms.ModelForm):
     class Meta:
         model = Instrumentos
         fields = ['nombre', 'tipo', 'marca', 'cantidad', 'precio']
-        # Estos atributos también bloquean valores inválidos desde el navegador.
+        # Estos atributos tambien bloquean valores invalidos desde el navegador.
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '50'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Guitarra Electrica', 'maxlength': '25'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '2000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '1000000', 'maxlength': '50', 'oninput': 'this.value = this.value.slice(0, 50)'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '100', 'maxlength': '3', 'oninput': 'this.value = this.value.slice(0, 3)'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '999999', 'maxlength': '6', 'oninput': 'this.value = this.value.slice(0, 6)'}),
         }
 
     # Validacion personalizada: Precio mayor a 0
@@ -31,13 +31,15 @@ class InstrumentoForm(forms.ModelForm):
         precio = self.cleaned_data.get('precio')
         if precio is not None and precio <= 0:
             raise forms.ValidationError("El precio debe ser un numero mayor a cero.")
+        if precio is not None and precio > 999999:
+            raise forms.ValidationError("El precio no puede superar los 999999")
         return precio
 
-    # Validacion personalizada: Cantidad positiva y no mayor que 2000
+    # Validacion personalizada: Cantidad positiva y no mayor que 100
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad is not None and cantidad <= 0:
             raise forms.ValidationError("La cantidad en stock debe ser mayor que cero.")
-        if cantidad is not None and cantidad > 2000:
-            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 2000.")
+        if cantidad is not None and cantidad > 100:
+            raise forms.ValidationError("La cantidad en stock no puede ser mayor que 100.")
         return cantidad
